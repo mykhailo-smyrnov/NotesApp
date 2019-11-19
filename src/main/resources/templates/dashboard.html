@@ -1,0 +1,96 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" ng-app="App">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+
+<!-- Title and other stuffs -->
+<title>Notes App</title>
+
+<!-- Stylesheets -->
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<!-- Custom CSS -->
+<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/style.css}"/>
+
+<!-- JS -->
+<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/angular.min.js}"></script>
+<script th:src="@{/js/ui-bootstrap-tpls-2.5.0.min.js}"></script>
+<!-- Custom JS -->
+<script>
+    (function () {
+        'use strict';
+        angular.module('App', ['ui.bootstrap'])
+            .controller('DashboardController', function ($scope) {
+
+                $scope.notes = {};
+                $scope.newNote = "";
+
+                $scope.addNote = function () {
+                    $.ajax({
+                        type: "POST",
+                        contentType: 'application/json',
+                        url: "/note/add",
+                        note: $scope.newNote
+                    })
+                        .done(function (data) {
+                            if (data === 'OK') {
+                                $scope.newNote = "";
+                            }
+                        })
+                        .fail(function () {
+                            console.log("error check status");
+                        });
+                };
+            });
+    })();
+</script>
+
+<!-- Body -->
+<body ng-controller="DashboardController">
+
+<header class="header">
+    <nav>
+        <div class="container">
+            <span class="title">Notes App</span>
+        </div>
+    </nav>
+</header>
+
+<div class="content">
+    <div class="mainbar" style="margin-left:0;">
+        <div class="matter">
+            <div class="container">
+
+                <!--                Note Upload Section-->
+                <div id="upload_block" class="row shadow-sm p-3 mb-5 bg-white rounded">
+                    <div class="col-md-12">
+                        <div class="widget" style="margin-left: auto; margin-right: auto; width: 70%;">
+                            <div class="widget-head">
+                                <p class="pull-left text-info font-weight-bold">Add new note</p>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="widget-content medias">
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" ng-model="newNote">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-foot">
+                                <button type="button" class="btn btn-primary" ng-click="addNote();">
+                                    Add Note
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
