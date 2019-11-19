@@ -26,9 +26,6 @@ public class NoteService {
         if (StringUtils.isBlank(user) || note == null)
             throw new IllegalArgumentException("User and Note required.");
 
-        if (!noteRepository.isUserExist(user))
-            noteRepository.createUser(user);
-
         noteRepository.delete(user, note);
     }
 }
